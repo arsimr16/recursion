@@ -6,10 +6,16 @@
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className) {
   var result = [];
-  $('*').each(function(){                                                                                                                            
-      if ($(this).hasClass(className)) {
-      	result.push(this);
-      }                                                                                                                                       
-  });
+  function matchClassName(element) {
+	if (_(element.classList).contains(className)) {
+	  result.push(element);
+	}
+	_(element.childNodes).forEach(function(child) {
+	  matchClassName(child);
+	});
+  }
+  matchClassName(document.body);
   return result;
 };
+
+
