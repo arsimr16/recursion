@@ -4,18 +4,21 @@
 // };
 
 // But instead we're going to implement it from scratch:
-var getElementsByClassName = function(className) {
-  var result = [];
-  function matchClassName(element) {
-	if (_(element.classList).contains(className)) {
-	  result.push(element);
+var getElementsByClassName = function(className, node) {
+	var nodes = [];
+	node = node || document.body;
+
+	var parts = node.className.split(' ');
+	if (parts.indexOf(className) >= 0){
+		nodes.push(node);
 	}
-	_(element.childNodes).forEach(function(child) {
-	  matchClassName(child);
-	});
-  }
-  matchClassName(document.body);
-  return result;
+
+	for (var i = 0; i < node.children.length; i++) {
+		var childResults = getElementsByClassName(className, node.children[i]);
+		nodes = nodes.concat(childResults);
+	}
+
+	return nodes;
 };
 
 
